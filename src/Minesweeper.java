@@ -247,6 +247,7 @@ public class Minesweeper {
                     System.out.println("Unable to flag " + B3_RED + action.split(" ")[1] + RESET + " error: out of bounds to the grid.");
                     continue;
                 }
+                won = gameWon();
                 flagGrid(x, y);
                 displayGrid();
                 System.out.println(TEXTHISTORY_DARKGREY + "\t> " + action + "\n" +
