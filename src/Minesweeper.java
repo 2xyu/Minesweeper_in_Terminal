@@ -248,6 +248,7 @@ public class Minesweeper {
                     continue;
                 }
                 flagGrid(x, y);
+                won = gameWon();
                 displayGrid();
                 System.out.println(TEXTHISTORY_DARKGREY + "\t> " + action + "\n" +
                         "\t| <flagged " + action.split(" ")[1] + ">" + RESET + "\n");
