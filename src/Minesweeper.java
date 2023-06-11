@@ -104,8 +104,8 @@ public class Minesweeper {
         else {
             seen[y][x] = true;
             if (countBombsAround(x, y) == 0) {
-                for (int col = (int) Math.max(0, x - 1); col < Math.min(width, x + 2); col++) {
-                    for (int row = (int) Math.max(0, y - 1); row < Math.min(height, y + 2); row++) {
+                for (int col = Math.max(0, x - 1); col < Math.min(width, x + 2); col++) {
+                    for (int row = Math.max(0, y - 1); row < Math.min(height, y + 2); row++) {
                         if (row == y && col == x) {
                             continue;
                         }
@@ -203,7 +203,7 @@ public class Minesweeper {
             String action = scanner.nextLine().trim();
             Pattern click = Pattern.compile("^click [a-z]-[1-9][0-9]?", Pattern.CASE_INSENSITIVE);
             Pattern flag = Pattern.compile("^flag [a-z]-[1-9][0-9]?", Pattern.CASE_INSENSITIVE);
-            Pattern resize = Pattern.compile("^resize [1-9][0-9]?x[1-9][0-9]?", Pattern.CASE_INSENSITIVE);
+            Pattern resize = Pattern.compile("^resize ([1-9]|1[0-9]|2[0-6])x[1-9][0-9]?", Pattern.CASE_INSENSITIVE);
             Pattern addbomb = Pattern.compile("^addbomb (?:[0-9]{1,3}|[1-8][0-9]{3}|9[0-7][0-9]{2}|980[0-1])$", Pattern.CASE_INSENSITIVE);
 
 
@@ -218,8 +218,18 @@ public class Minesweeper {
                         "\t| addbomb <n> ------------> Places n bombs randomly on grid.\n" +
                         "\t| click <a...z>-<1...99> -> Clicks a cell. (example: click b-5)\n" +
                         "\t| flag <a...z>-<1...99> --> Flags a cell. (example: flag h-2)\n" +
-                        "\t| resize <X>x<Y> -> Resizes grid to x by y units. (units can only be 1 to 99) (example: resize 16x57)\n\n" +
+                        "\t| resize <X>x<Y> ---------> Resizes grid to x by y units. (units can only be 1 to 26 by 1 to 99) (example: resize 16x57)\n\n" +
                         RESET);
+            }
+            else if (action.equalsIgnoreCase("reset")){
+                System.out.println(
+                        "Resetting grid now.\n" +
+                        "Press any key to continue.\n");
+                scanner.nextLine();
+                clearTerminal();
+                resizeGird(width, height);
+                addbomb(bombs);
+                displayGrid();
             }
             else if (click.matcher(action).matches()){
                 int x = action.split(" ")[1].split("-")[0].charAt(0) - 'a';
@@ -228,7 +238,9 @@ public class Minesweeper {
                     System.out.println("Unable to click " + B3_RED + action.split(" ")[1] + RESET + " error: out of bounds to the grid.");
                     continue;
                 }
-                lost = clickGrid(x, y);
+                if (!flagged[y][x]) {
+                    lost = clickGrid(x, y);
+                }
                 won = gameWon();
                 displayGrid();
 
@@ -267,7 +279,7 @@ public class Minesweeper {
                         "\t| <resized grid to " +  action.split(" ")[1] + ">" + RESET + "\n");
             }
             else if (addbomb.matcher(action).matches()){
-                int bombs = (int) Integer.parseInt(action.split(" ")[1]);
+                int bombs = Integer.parseInt(action.split(" ")[1]);
 
                 if (bombs > width * height){
                     System.out.println("Unable to add " + B3_RED + action.split(" ")[1] + RESET + " error: more bombs than the grid can fit.");
