@@ -201,10 +201,10 @@ public class Minesweeper {
         while (scanner.hasNextLine()){
             clearTerminal();
             String action = scanner.nextLine().trim();
-            Pattern click = Pattern.compile("^click [a-z]-[1-9][0-9]?", Pattern.CASE_INSENSITIVE);
-            Pattern flag = Pattern.compile("^flag [a-z]-[1-9][0-9]?", Pattern.CASE_INSENSITIVE);
-            Pattern resize = Pattern.compile("^resize ([1-9]|1[0-9]|2[0-6])x[1-9][0-9]?", Pattern.CASE_INSENSITIVE);
-            Pattern addbomb = Pattern.compile("^addbomb (?:[0-9]{1,3}|[1-8][0-9]{3}|9[0-7][0-9]{2}|980[0-1])$", Pattern.CASE_INSENSITIVE);
+            Pattern click = Pattern.compile("^(c|click) [a-z]-[1-9][0-9]?", Pattern.CASE_INSENSITIVE);
+            Pattern flag = Pattern.compile("^(f|flag) [a-z]-[1-9][0-9]?", Pattern.CASE_INSENSITIVE);
+            Pattern resize = Pattern.compile("^(r|resize) ([1-9]|1[0-9]|2[0-6])x[1-9][0-9]?", Pattern.CASE_INSENSITIVE);
+            Pattern addbomb = Pattern.compile("^(a|addbomb) (?:[0-9]{1,3}|[1-8][0-9]{3}|9[0-7][0-9]{2}|980[0-1])$", Pattern.CASE_INSENSITIVE);
 
 
             if (action.equals("")){
@@ -314,6 +314,11 @@ public class Minesweeper {
                 clearTerminal();
                 resizeGird(width, height);
                 addbomb(bombs);
+                displayGrid();
+            }
+            else {
+
+                clearTerminal();
                 displayGrid();
             }
 
